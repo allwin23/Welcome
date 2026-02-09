@@ -69,7 +69,9 @@ export default function Chat() {
                                     text="Encrypted Chat With"
                                     disabled={false}
                                     speed={3}
-                                    className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight uppercase"
+                                    color="#0a0707ff"
+                                    shineColor="#00000000"
+                                    className="text-4xl md:text-5xl lg:text-6xl font-sunbflower-tracking-tight uppercase opacity-60"
                                 />
                                 <GradientText
                                     colors={["#ff5f1f", "#ff8001", "#ffd500"]}

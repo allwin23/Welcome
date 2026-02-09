@@ -3,6 +3,7 @@ import { useVault } from '../hooks/useVault';
 import { useSecurity } from './SecurityContext';
 import { InputValidator } from '../utils/validation';
 import { getApiClient } from '../utils/api';
+import { clearHistory } from '../utils/history';
 
 interface Session {
   id: string | null;
@@ -71,6 +72,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       if (vaultReady && vault) {
         await vault.wipe();
       }
+      clearHistory();
     } catch (error) {
       console.error('Failed to wipe vault:', error);
       addSecurityEvent({

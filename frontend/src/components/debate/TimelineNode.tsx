@@ -6,9 +6,10 @@ interface TimelineNodeProps {
     title: string;
     isActive?: boolean;
     isLast?: boolean;
+    color?: 'primary' | 'black';
 }
 
-export function TimelineNode({ timestamp, title, isActive, isLast }: TimelineNodeProps) {
+export function TimelineNode({ timestamp, title, isActive, isLast, color = 'primary' }: TimelineNodeProps) {
     return (
         <div className="flex flex-row gap-4 w-full h-full min-w-[200px]">
             {/* Left Column: Line & Dot */}
@@ -17,7 +18,11 @@ export function TimelineNode({ timestamp, title, isActive, isLast }: TimelineNod
                 <motion.div
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className={`w-3 h-3 rounded-full border-2 z-10 ${isActive ? 'bg-accent border-accent' : 'bg-primary border-primary'}`}
+                    className={`w-3 h-3 rounded-full border-2 z-10 ${
+                        color === 'black'
+                            ? (isActive ? 'bg-black border-black' : 'bg-transparent border-black/50')
+                            : (isActive ? 'bg-accent border-accent' : 'bg-primary border-primary')
+                    }`}
                 />
 
                 {/* Vertical Line */}
@@ -26,7 +31,7 @@ export function TimelineNode({ timestamp, title, isActive, isLast }: TimelineNod
                         initial={{ height: 0 }}
                         animate={{ height: '100%' }}
                         transition={{ duration: 0.5 }}
-                        className="w-px bg-primary/20 flex-grow min-h-[50px] my-1 absolute top-3 bottom-[-100px]" // Absolute line but relative to this column
+                        className="w-px bg-primary/20 flex-grow min-h-[50px] my-1 absolute top-3 bottom-[-100px]" 
                     />
                 )}
             </div>

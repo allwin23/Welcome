@@ -53,6 +53,7 @@ export interface SanitizePdfResponse {
   pages: number;
   processing_time_sec: number;
   gemini_calls: number;
+  text?: string;
 }
 
 export interface SanitizedOutput {
@@ -312,29 +313,39 @@ class ApiClient {
 
     console.log(`[API] PDF result: ${pages} pages, ${tokenIds.length} tokens`);
 
-    // Fetch actual token mapping
+    // Fetch actual text content + tokens if possible
     let tokens: Record<string, string> = {};
-    if (tokenIds.length > 0) {
+    let text = '';
+
+    if (processingId) {
       try {
         const outputResponse = await this.getSanitizedOutputsByProcessingId(processingId, sessionId);
         const pdfOutput = outputResponse.outputs.find(o => o.input_type === 'pdf');
 
         if (pdfOutput && pdfOutput.tokenized_content) {
-          try {
-            tokens = JSON.parse(pdfOutput.tokenized_content);
+          text = pdfOutput.tokenized_content;
 
-            // SECURITY: Store tokens in vault immediately
-            const vault = getVault();
-            if (vault.isReady() && Object.keys(tokens).length > 0) {
-              await vault.storeFromTokenMap(tokens);
-              console.log(`[API] Secured ${Object.keys(tokens).length} PDF tokens in vault`);
+          // Attempt to parse as tokens map if backend sent map
+          try {
+            // Basic heuristic: check if it looks like JSON map
+            if (text.trim().startsWith('{')) {
+              const parsed = JSON.parse(text);
+              if (parsed && typeof parsed === 'object') {
+                tokens = parsed;
+                // SECURITY: Store tokens in vault immediately
+                const vault = getVault();
+                if (vault.isReady() && Object.keys(tokens).length > 0) {
+                  await vault.storeFromTokenMap(tokens);
+                  console.log(`[API] Secured ${Object.keys(tokens).length} PDF tokens in vault`);
+                }
+              }
             }
           } catch (e) {
-            console.error('[API] PDF token parse error:', e);
+            // Ignore, likely just text content with [TOKENS] inline
           }
         }
       } catch (e) {
-        console.error('[API] PDF token fetch error:', e);
+        console.error('[API] PDF output fetch error:', e);
       }
     }
 
@@ -344,6 +355,7 @@ class ApiClient {
       pages,
       processing_time_sec: processingTime,
       gemini_calls: geminiCalls,
+      text,
     };
   }
 
