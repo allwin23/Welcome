@@ -5,6 +5,8 @@ import { useState } from "react";
 import ChatLayout from '../components/ChatLayout';
 import { Sidebar } from '../components/Sidebar';
 import Navbar from '../components/NavBar';
+import ShinyText from '../components/ShinyText';
+import GradientText from '../components/GradientText';
 
 export default function Chat() {
     const navigate = useNavigate();
@@ -58,9 +60,26 @@ export default function Chat() {
                 </div>
 
                 {/* Bottom Right - Chat Layout (Main Content) */}
-                <div className="relative h-full w-full min-h-0">
+                <div className="relative h-full w-full min-h-0 pt-4">
                     <ChatLayout>
-                        <div className="relative w-full h-full flex flex-col justify-end pb-32">
+                        <div className="relative w-full h-full flex flex-col justify-between pb-32">
+                            {/* Top Header Section - Centered */}
+                            <div className="pt-16 flex flex-col items-center justify-center gap-4 text-center px-4">
+                                <ShinyText
+                                    text="Encrypted Chat With"
+                                    disabled={false}
+                                    speed={3}
+                                    className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight uppercase"
+                                />
+                                <GradientText
+                                    colors={["#ff5f1f", "#ff8001", "#ffd500"]}
+                                    animationSpeed={2.5}
+                                    showBorder={false}
+                                    className="text-xl md:text-2xl font-mono tracking-[0.2em]"
+                                >
+                                    LEGAL SYSTEM
+                                </GradientText>
+                            </div>
 
                             {/* Transition Overlay */}
                             {isProcessing && (
