@@ -7,7 +7,7 @@ interface SidebarProps {
 
 export function Sidebar({ className }: SidebarProps) {
   const navigate = useNavigate();
-  const { session } = useSession();
+  const { session, initializeSession, clearSession } = useSession();
 
   return (
     <div className={`bg-black rounded-2xl px-5 py-6 text-white shadow-[0_25px_70px_rgba(0,0,0,0.35)] flex flex-col ${className || ''}`}>
@@ -46,6 +46,14 @@ export function Sidebar({ className }: SidebarProps) {
       {/* push CTA to bottom */}
       <div className="mt-auto">
 
+        {/* Session Control Button */}
+        <button
+          onClick={() => session.isActive ? clearSession() : initializeSession()}
+          className="w-full bg-[#f5f0e9] text-black py-3 rounded-lg text-sm font-medium hover:opacity-90 transition uppercase mb-8"
+        >
+          {session.isActive ? 'CLOSE SESSION' : 'CREATE SESSION'}
+        </button>
+
         <div
           className="text-center mb-3 text-[10px] tracking-[0.2em] text-white/70"
           style={{ fontFamily: "Space Mono" }}
@@ -57,7 +65,7 @@ export function Sidebar({ className }: SidebarProps) {
           onClick={() => navigate('/')}
           className="w-full bg-[#f5f0e9] text-black py-3 rounded-lg text-sm font-medium hover:opacity-90 transition uppercase"
         >
-          {session.id ? session.id.slice(0, 8) + '...' : 'INITIALIZING...'}
+          {session.id ? session.id.slice(0, 8) + '...' : 'NO ACTIVE SESSION'}
         </button>
 
       </div>

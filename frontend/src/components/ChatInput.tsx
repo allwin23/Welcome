@@ -40,8 +40,37 @@ export function ChatInput({ onSend, isProcessing }: ChatInputProps) {
         }
     };
 
+    const handleDemoCase = () => {
+        const prompts = [
+            "Sanitize this email: john.doe@example.com regarding case #12345.",
+            "Patient Maria Garcia (DOB: 12/05/1980) diagnosed with Type 2 Diabetes.",
+            "Review contract for Client: Acme Corp, signed by Alice Smith on 2023-09-01.",
+            "Employee ID: 998877, Salary: $120,000, SSN: ***-**-6789.",
+            "Incident Report: Driver Mike Ross, License #DL-999-000, involved in collision.",
+            "Payment of $500 processed for credit card 4532-xxxx-xxxx-1234.",
+            "Legal discovery: Witness Robert Paulson, Address: 123 Paper St, Wilmington.",
+            "School Record: Student Emily Blunt, Grade 5, Parent Contact: +1-555-0199.",
+            "Hotel Reservation: Guest James Bond, Passport #UK-007-GOLD.",
+            "Technical Log: User admin (IP: 192.168.1.5) accessed server at 14:00."
+        ];
+        const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        setInput(randomPrompt);
+    };
+
     return (
-        <div className="w-full max-w-3xl mx-auto px-4">
+        <div className="w-full max-w-3xl mx-auto px-4 flex flex-col gap-4">
+
+            {/* Demo Cases Button */}
+            <div className="flex justify-center">
+                <button
+                    onClick={handleDemoCase}
+                    disabled={isProcessing}
+                    className="px-4 py-1.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-white text-[10px] font-mono tracking-widest hover:bg-black/60 transition-all flex items-center gap-2"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                    ADD DEMO CASE
+                </button>
+            </div>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -101,6 +130,7 @@ export function ChatInput({ onSend, isProcessing }: ChatInputProps) {
                             className="flex-1 max-h-32 min-h-[48px] py-3 px-3 bg-transparent border-none text-text placeholder:text-text-muted/50 focus:ring-0 resize-none font-ui text-base leading-relaxed disabled:opacity-50"
                             rows={1}
                         />
+
 
                         <button
                             onClick={handleSend}

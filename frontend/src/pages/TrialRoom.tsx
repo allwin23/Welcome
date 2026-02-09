@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AppLayout } from '../components/AppLayout';
 import { useSession } from '../contexts/SessionContext';
 import { DebateLayout } from '../components/debate/DebateLayout';
@@ -25,20 +25,12 @@ interface TrialRoomProps {
     minimal?: boolean;
 }
 
-export function TrialRoom({ onDebateStateChange, autoStart }: TrialRoomProps) {
+export function TrialRoom({ onDebateStateChange }: TrialRoomProps) {
     const { session } = useSession();
+    // const location = useLocation(); // Unused now
     const [steps, setSteps] = useState<DebateStep[]>([]);
     const [isDebating, setIsDebating] = useState(false);
-    const [hasAutoStarted, setHasAutoStarted] = useState(false);
-
     const [showVerdict, setShowVerdict] = useState(false);
-
-    useEffect(() => {
-        if (autoStart && session.id && !hasAutoStarted && !isDebating && steps.length === 0) {
-            runTrial();
-            setHasAutoStarted(true);
-        }
-    }, [autoStart, session.id, hasAutoStarted, steps.length]);
 
     const runTrial = async () => {
         if (isDebating || !session.id) return;
@@ -225,13 +217,28 @@ export function TrialRoom({ onDebateStateChange, autoStart }: TrialRoomProps) {
                     {/* VERDICT ROW - Appears at bottom */}
                     {showVerdict && (
                         <div className="contents fade-in-row">
+                            {/* 1. Verdict Timeline Node */}
+                            <div className="relative flex flex-col items-start pl-8 pt-6 transition-all duration-700">
+                                <TimelineNode
+                                    timestamp={new Date().toLocaleTimeString()}
+                                    title="FINAL VERDICT"
+                                    isActive={true}
+                                    isLast={true}
+                                />
+                            </div>
+                            {/* Empty middle and right columns for spacing if needed */}
+                            <div />
+                            <div />
+
+                            {/* 2. Verdict Card Centered Below */}
                             <div className="col-span-3 flex justify-center py-12">
                                 <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-black/5 animate-float transform transition-all hover:scale-[1.01]">
-                                    <div className="bg-primary px-8 py-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
+                                    <div className="bg-primary px-8 py-4 flex items-center justify-center relative">
+                                        {/* Center title properly */}
+                                        <div className="absolute left-8 flex items-center gap-3">
                                             <div className="w-3 h-3 rounded-full bg-[#00ff9d] shadow-[0_0_10px_#00ff9d]" />
-                                            <h3 className="text-white font-heading font-bold tracking-widest text-lg">FINAL VERDICT</h3>
                                         </div>
+                                        <h3 className="text-white font-heading font-bold tracking-widest text-lg">FINAL VERDICT</h3>
                                         <span className="text-white/80 font-mono text-sm">CASE #9283-X</span>
                                     </div>
                                     <div className="p-10 flex flex-col items-center text-center">

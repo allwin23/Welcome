@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
+
 interface NavbarProps {
     width?: string;
     className?: string;
 }
 
 export default function Navbar({ width, className }: NavbarProps) {
+    const navigate = useNavigate();
     return (
         <header className={`w-full flex justify-center sticky top-0 z-50 pt-4 ${className || ''}`}>
             <nav
@@ -48,11 +51,12 @@ export default function Navbar({ width, className }: NavbarProps) {
                 {/* RIGHT */}
                 <div className="flex items-center gap-3">
                     {/* Language */}
-                   
 
-                    {/* Contact */}
+
+                    {/* Contact - Now Try Button */}
                     <button
-                        className="px-5 h-[40px] rounded-xl text-sm flex items-center gap-2"
+                        onClick={() => navigate('/')}
+                        className="px-5 h-[40px] rounded-xl text-sm flex items-center gap-2 hover:opacity-80 transition-opacity"
                         style={{
                             background: "rgba(255,255,255,0.9)",
                             color: "#111",
@@ -60,7 +64,7 @@ export default function Navbar({ width, className }: NavbarProps) {
                             letterSpacing: "0.05em",
                         }}
                     >
-                        TRYY <span>→</span>
+                        TRY <span>→</span>
                     </button>
                 </div>
             </nav>
