@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import Navbar from './NavBar';
-import AestheticBranding from './AestheticBranding';
 
 interface AppLayoutProps {
     children: ReactNode;
@@ -10,49 +9,52 @@ interface AppLayoutProps {
 
 export function AppLayout({ children, showSidebar = true }: AppLayoutProps) {
     return (
-        <div className="flex flex-col h-full w-full bg-[#f5f0e9] overflow-hidden">
+        <div className="flex flex-row h-full w-full bg-transparent overflow-hidden">
 
-            {/* TOP HEADER SECTION */}
-            <div className="flex items-start justify-between px-6 pt-6 pb-4 z-50 flex-shrink-0">
-                <div className="w-[200px]">
-                    <AestheticBranding />
-                </div>
+            {/* --- GLOBAL WRAPPER: Centers everything with max-width --- */}
+            {/* Reverting to reduced padding for positioning, but keeping alignment logic */}
+            <div className="flex-1 flex gap-6 p-6 max-w-[1700px] mx-auto h-full overflow-hidden">
 
-                <div className="flex-1 flex justify-center">
-                    <Navbar width="w-full max-w-2xl" />
-                </div>
-
-                <div className="w-[200px]" /> {/* Spacer for centering navbar */}
-            </div>
-
-            {/* MAIN CONTENT ROW */}
-            <div className="flex-1 flex overflow-hidden relative z-0">
-
-                {/* Left Sidebar Column */}
+                {/* Left Sidebar Column - Same Height as Layout */}
                 {showSidebar && (
-                    <div className="w-[300px] h-full flex flex-col p-4 flex-shrink-0 z-40">
-                        <Sidebar className="h-full w-full" />
-                    </div>
+                    <aside className="w-[250px] h-full flex-shrink-0 flex flex-col">
+                        {/* 
+                           Top Spacer: Matches EXACTLY the Navbar height (h-14/56px) + margin (mb-4/16px) 
+                           Total = 72px visually. 
+                        */}
+                        <div className="h-14 mb-4 flex-shrink-0" />
+
+                        <div className="flex-1 w-full shadow-2xl rounded-[1.5rem] overflow-hidden relative">
+                            <Sidebar className="h-full w-full" />
+                        </div>
+                    </aside>
                 )}
 
-                {/* Right Content Column */}
-                <main className="flex-1 h-full p-4 relative min-w-0">
-                    {/* Glass Workspace Container */}
-                    <div className="w-full h-full rounded-3xl relative overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.18)]">
+                {/* Right Main Column - Vertical Stack */}
+                <div className="flex-1 flex flex-col h-full min-w-0">
 
-                        {/* Glass Visuals */}
-                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[4px] z-0" />
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-[#ece6dc]/20 z-0" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(0,0,0,0.05))] z-0" />
-
-                        {/* Content Wrapper */}
-                        <div className="relative z-10 w-full h-full">
-                            {children}
+                    {/* TOP NAVBAR ROW - Matches Width of Content Below */}
+                    <div className="h-14 flex-shrink-0 flex justify-end items-center mb-4">
+                        <div className="w-full">
+                            <Navbar width="w-full" />
                         </div>
                     </div>
-                </main>
+
+                    {/* MAIN CONTENT CARD - Centered & Sized */}
+                    <main className="flex-1 flex relative overflow-hidden rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/40">
+                        {/* Glass Visuals */}
+                        <div className="absolute inset-0 bg-white/40 backdrop-blur-xl z-0" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-[#ece6dc]/30 z-0" />
+
+                        {/* Content Wrapper */}
+                        <div className="relative z-10 w-full h-full flex flex-col">
+                            {children}
+                        </div>
+                    </main>
+                </div>
 
             </div>
+
         </div>
     );
 }

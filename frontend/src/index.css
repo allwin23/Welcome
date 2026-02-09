@@ -24,10 +24,10 @@
     /* Prevent scroll on body */
     @apply bg-[#f5f0e9] text-[#0a0a0a];
 
-    /* High contrast grid for debugging visibility */
+    /* High contrast grid for debugging visibility key to VaultSim look */
     background-image:
-      linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+      linear-gradient(rgba(0, 0, 0, 0.08) 1.5px, transparent 1.5px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1.5px, transparent 1.5px);
     background-size: 40px 40px;
   }
 
